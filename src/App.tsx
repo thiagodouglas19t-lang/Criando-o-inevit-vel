@@ -3,39 +3,64 @@ import { useMemo, useState } from 'react'
 
 const lessons = [
   {
-    title: '1. Descobrir o IP da TV',
-    text: 'Na TV: Configurações > Rede > Wi-Fi. Copie o IP, exemplo: 192.168.0.15.',
+    title: '1. Conexão autorizada',
+    text: 'Você conecta no seu próprio dispositivo. A TV precisa pedir autorização antes de aceitar comandos.',
   },
   {
-    title: '2. Ativar modo desenvolvedor',
-    text: 'Em Android TV/Google TV, ative opções de desenvolvedor e depuração pela rede. Só faça isso na sua TV.',
+    title: '2. Comandos reais',
+    text: 'ADB permite abrir links, apps, enviar texto, pressionar botões e automatizar testes no Android TV.',
   },
   {
-    title: '3. Conectar com ADB',
-    text: 'O Termux no celular envia comandos para a TV na mesma rede. A TV vai pedir autorização.',
+    title: '3. Defesa dos seus dados',
+    text: 'Aprender comando e conexão te ajuda a entender permissões, portas, rede local e como evitar acesso indevido.',
   },
 ]
 
+function encodeAdbText(value: string) {
+  return (value.trim() || 'Salve da THKLAYUS').replaceAll(' ', '%s')
+}
+
 function makeCommands(ip: string, message: string, imageUrl: string) {
   const safeIp = ip.trim() || '192.168.0.15'
-  const safeMessage = message.trim().replaceAll(' ', '%s') || 'Salve%sTV'
-  const safeImage = imageUrl.trim() || 'https://example.com/imagem.jpg'
+  const safeMessage = encodeAdbText(message)
+  const safeImage = imageUrl.trim() || 'https://example.com/minha-imagem.jpg'
 
   return [
-    `pkg update && pkg install android-tools -y`,
-    `adb connect ${safeIp}:5555`,
-    `adb devices`,
-    `adb shell input text "${safeMessage}"`,
-    `adb shell input keyevent 66`,
-    `adb shell am start -a android.intent.action.VIEW -d "${safeImage}"`,
-    `adb disconnect ${safeIp}:5555`,
+    {
+      title: 'Preparar Termux',
+      cmd: 'pkg update && pkg install android-tools -y',
+    },
+    {
+      title: 'Conectar na TV',
+      cmd: `adb connect ${safeIp}:5555`,
+    },
+    {
+      title: 'Ver dispositivos conectados',
+      cmd: 'adb devices',
+    },
+    {
+      title: 'Enviar texto de teste',
+      cmd: `adb shell input text "${safeMessage}"`,
+    },
+    {
+      title: 'Apertar Enter/OK',
+      cmd: 'adb shell input keyevent 66',
+    },
+    {
+      title: 'Abrir imagem de exemplo na TV',
+      cmd: `adb shell am start -a android.intent.action.VIEW -d "${safeImage}"`,
+    },
+    {
+      title: 'Desconectar com segurança',
+      cmd: `adb disconnect ${safeIp}:5555`,
+    },
   ]
 }
 
 export default function App() {
   const [ip, setIp] = useState('192.168.0.15')
   const [message, setMessage] = useState('Salve da THKLAYUS')
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState('https://images.unsplash.com/photo-1518779578993-ec3579fee39f')
   const [copied, setCopied] = useState('')
 
   const commands = useMemo(() => makeCommands(ip, message, imageUrl), [ip, message, imageUrl])
@@ -51,42 +76,46 @@ export default function App() {
       <section className="mx-auto max-w-6xl px-5 py-8">
         <div className="rounded-[32px] border border-purple-500/30 bg-gradient-to-br from-purple-950/40 to-black p-6 shadow-2xl shadow-purple-950/30">
           <p className="text-sm font-bold uppercase tracking-[0.35em] text-purple-300">THKLAYUS LAB</p>
-          <h1 className="mt-3 text-4xl font-black md:text-6xl">Painel de programação segura</h1>
-          <p className="mt-4 max-w-2xl text-zinc-300">Estudo real: celular + Termux + ADB + sua TV na mesma rede. Nada de invadir terceiros; aqui é laboratório defensivo e controle autorizado.</p>
+          <h1 className="mt-3 text-4xl font-black md:text-6xl">Painel hacker de estudo</h1>
+          <p className="mt-4 max-w-2xl text-zinc-300">Aprenda conexão, comando, automação e segurança usando seus próprios dispositivos. O foco é entender como funciona para proteger seus dados e controlar sua TV com permissão.</p>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <Card icon={<Terminal />} title="Programação real" text="Você vai aprender comandos, scripts, IP, terminal e automação." />
-          <Card icon={<Tv />} title="TV local" text="Conexão permitida com Android TV/Google TV via ADB." />
-          <Card icon={<Shield />} title="Hacker do bem" text="Testar o que é seu, entender riscos e corrigir rápido." />
+          <Card icon={<Terminal />} title="Comandos reais" text="ADB, Termux, shell, keyevent, intent e automação básica." />
+          <Card icon={<Tv />} title="TV autorizada" text="Conecta na sua Android TV/Google TV pela rede local." />
+          <Card icon={<Shield />} title="Segurança defensiva" text="Aprender acesso permitido para entender permissões e proteger o que é seu." />
         </div>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-3xl border border-zinc-800 bg-zinc-950 p-5">
-            <h2 className="flex items-center gap-2 text-2xl font-bold"><Wifi className="text-purple-300" /> Dados da sua TV</h2>
-            <label className="mt-5 block text-sm text-zinc-400">IP da TV</label>
+            <h2 className="flex items-center gap-2 text-2xl font-bold"><Wifi className="text-purple-300" /> Laboratório local</h2>
+
+            <label className="mt-5 block text-sm text-zinc-400">IP da sua TV</label>
             <input value={ip} onChange={(e) => setIp(e.target.value)} className="mt-2 w-full rounded-2xl border border-zinc-800 bg-black p-4 outline-none focus:border-purple-500" />
 
-            <label className="mt-5 block text-sm text-zinc-400">Mensagem para testar</label>
+            <label className="mt-5 block text-sm text-zinc-400">Texto de teste</label>
             <input value={message} onChange={(e) => setMessage(e.target.value)} className="mt-2 w-full rounded-2xl border border-zinc-800 bg-black p-4 outline-none focus:border-purple-500" />
 
-            <label className="mt-5 block text-sm text-zinc-400">Link de imagem pública</label>
-            <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://.../imagem.jpg" className="mt-2 w-full rounded-2xl border border-zinc-800 bg-black p-4 outline-none focus:border-purple-500" />
+            <label className="mt-5 block text-sm text-zinc-400">Imagem de exemplo</label>
+            <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="mt-2 w-full rounded-2xl border border-zinc-800 bg-black p-4 outline-none focus:border-purple-500" />
 
             <div className="mt-5 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-100">
-              O navegador não executa ADB sozinho. Você copia os comandos e cola no Termux. Isso é mais seguro e evita abuso.
+              Regra do lab: use só na sua TV, no seu Wi‑Fi, com autorização na tela. Isso é estudo de controle e defesa, não roubo de dados.
             </div>
           </div>
 
           <div className="rounded-3xl border border-zinc-800 bg-zinc-950 p-5">
-            <h2 className="text-2xl font-bold">Comandos para Termux</h2>
+            <h2 className="text-2xl font-bold">Comandos para copiar no Termux</h2>
             <div className="mt-4 space-y-3">
-              {commands.map((cmd) => (
-                <div key={cmd} className="flex items-center gap-3 rounded-2xl border border-zinc-800 bg-black p-3">
-                  <code className="flex-1 overflow-x-auto text-sm text-purple-100">{cmd}</code>
-                  <button onClick={() => copy(cmd)} className="rounded-xl bg-purple-600 p-3 hover:bg-purple-500" aria-label="copiar comando">
-                    {copied === cmd ? <CheckCircle2 size={18} /> : <Copy size={18} />}
-                  </button>
+              {commands.map((item) => (
+                <div key={item.title} className="rounded-2xl border border-zinc-800 bg-black p-3">
+                  <div className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-purple-300">{item.title}</div>
+                  <div className="flex items-center gap-3">
+                    <code className="flex-1 overflow-x-auto text-sm text-purple-100">{item.cmd}</code>
+                    <button onClick={() => copy(item.cmd)} className="rounded-xl bg-purple-600 p-3 hover:bg-purple-500" aria-label="copiar comando">
+                      {copied === item.cmd ? <CheckCircle2 size={18} /> : <Copy size={18} />}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -94,7 +123,7 @@ export default function App() {
         </section>
 
         <section className="mt-8 rounded-3xl border border-zinc-800 bg-zinc-950 p-5">
-          <h2 className="text-2xl font-bold">Trilha de estudo</h2>
+          <h2 className="text-2xl font-bold">O que você está aprendendo</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {lessons.map((lesson) => (
               <div key={lesson.title} className="rounded-2xl border border-zinc-800 bg-black p-4">
