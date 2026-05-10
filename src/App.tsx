@@ -53,6 +53,7 @@ export default function App() {
   const [quizIndex, setQuizIndex] = useState(0)
   const [answer, setAnswer] = useState('')
   const [selectedCard, setSelectedCard] = useState(cards[0])
+  const [showEnded, setShowEnded] = useState(true)
 
   const slides = useMemo(() => [
     { icon: '🌸', eyebrow: 'Abertura', title: 'Feliz Dia das Mães', content: <><p className="slide-text">Mães são uma das maiores bênçãos da nossa vida. Elas carregam amor quando a gente ainda nem entende o mundo, e sustentam a família com cuidado, fé e presença.</p><p className="verse">“O amor tudo sofre, tudo crê, tudo espera, tudo suporta.” — 1 Coríntios 13:7</p></> },
@@ -67,6 +68,8 @@ export default function App() {
   ], [person, blessingIndex, quizIndex, answer, selectedCard, countdown])
 
   const progress = Math.round(((slide + 1) / slides.length) * 100)
+
+  if (countdown.ended && showEnded) return <main className="page"><Background /><section className="deck cover"><div className="ribbon">tempo especial encerrado</div><div className="cover-icon">🕊️</div><p className="eyebrow">O tempo acabou</p><h1>Mas o amor fica</h1><p className="cover-text">A apresentação especial de 24 horas chegou ao fim às {countdown.endTime}. Mas Dia das Mães é todos os dias, porque amor, honra e gratidão não dependem de calendário.</p><p className="small-note">Que Deus abençoe cada mãe da nossa família hoje, amanhã e sempre.</p><button className="primary" onClick={() => { setShowEnded(false); setStarted(true); setSlide(7) }}>Ler oração final 🙏</button><button className="ghost full" onClick={() => { setShowEnded(false); setStarted(true); setSlide(0) }}>Ver homenagem mesmo assim ❤️</button></section></main>
 
   if (!started) return <main className="page"><Background /><section className="deck cover"><div className="ribbon">feito com carinho</div><div className="cover-icon">🌸</div><p className="eyebrow">Presente digital</p><h1>Amor em Código</h1><p className="cover-text">Uma apresentação interativa com carinho, fé, reflexão e brincadeiras para as mães da nossa família.</p><div className="countdown-pill">Acaba às {countdown.endTime} • {String(countdown.hours).padStart(2, '0')}h {String(countdown.minutes).padStart(2, '0')}m restantes</div><p className="small-note">A apresentação tem hora para terminar, mas Dia das Mães é todos os dias.</p><div className="chips">{familyMothers.map((item) => <button key={item} onClick={() => setPerson(item)} className={person === item ? 'chip active' : 'chip'}>{item}</button>)}</div><button className="primary" onClick={() => setStarted(true)}>Começar homenagem 🌸</button></section></main>
 
