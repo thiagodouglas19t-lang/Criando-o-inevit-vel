@@ -31,50 +31,22 @@ export default function App() {
   const [selectedCard, setSelectedCard] = useState(cards[0])
 
   const slides = useMemo(() => [
-    {
-      eyebrow: 'Abertura',
-      title: 'Feliz Dia das Mães',
-      content: <><p className="slide-text">Mães são uma das maiores bênçãos da nossa vida. Elas carregam amor quando a gente ainda nem entende o mundo, e sustentam a família com cuidado, fé e presença.</p><p className="verse">“O amor tudo sofre, tudo crê, tudo espera, tudo suporta.” — 1 Coríntios 13:7</p></>,
-    },
-    {
-      eyebrow: 'Família',
-      title: 'Onde existe mãe, existe casa',
-      content: <><p className="slide-text">Uma família não é feita só de sobrenome. É feita de gente que cuida, perdoa, ora, ensina e permanece. E muitas vezes, esse coração começa em uma mãe.</p><p className="small-note">Mãe é raiz, abrigo e oração em forma de gente.</p></>,
-    },
-    {
-      eyebrow: 'Reflexão',
-      title: `${person} é presença de Deus`,
-      content: <><p className="slide-text">{person}, seu amor não é pequeno. Ele aparece nos detalhes: na preocupação, no conselho, no cuidado silencioso e na força de continuar mesmo cansada.</p><p className="small-note">O mundo chama isso de rotina. A família chama de amor.</p></>,
-    },
-    {
-      eyebrow: 'Palavra de fé',
-      title: 'Uma bênção para hoje',
-      content: <><div className="blessing">{blessings[blessingIndex]}</div><button className="primary small" onClick={() => setBlessingIndex((blessingIndex + 1) % blessings.length)}>Sortear outra bênção 🙏</button></>,
-    },
-    {
-      eyebrow: 'Brincadeira',
-      title: 'Quiz das mães da família',
-      content: <><p className="question">{quiz[quizIndex].question}</p><div className="option-grid">{quiz[quizIndex].options.map((option) => <button className="option" key={option} onClick={() => setAnswer(quiz[quizIndex].answer)}>{option}</button>)}</div>{answer && <div className="answer">{answer}</div>}<button className="ghost full" onClick={() => { setAnswer(''); setQuizIndex((quizIndex + 1) % quiz.length) }}>Nova pergunta</button></>,
-    },
-    {
-      eyebrow: 'Interativo',
-      title: 'Escolha uma carta',
-      content: <><p className="small-note">Toque em uma carta para receber uma mensagem.</p><div className="card-grid">{cards.map((card) => <button key={card.title} onClick={() => setSelectedCard(card)} className={`gift-card ${selectedCard.title === card.title ? 'active' : ''}`}><span>{card.icon}</span><strong>{card.title}</strong></button>)}</div><div className="answer soft">{selectedCard.text}</div></>,
-    },
-    {
-      eyebrow: 'Mensagem final',
-      title: 'Com amor e gratidão',
-      content: <><p className="slide-text">Que Deus recompense cada cuidado silencioso, cada oração feita no secreto e cada gesto de amor que sustentou nossa família.</p><p className="small-note">Mãe e família são presentes que a gente não mede em dinheiro. Mede em memória, cuidado e amor.</p><div className="final-box">Feliz Dia das Mães ❤️</div></>,
-    },
+    { eyebrow: 'Abertura', title: 'Feliz Dia das Mães', content: <><p className="slide-text">Mães são uma das maiores bênçãos da nossa vida. Elas carregam amor quando a gente ainda nem entende o mundo, e sustentam a família com cuidado, fé e presença.</p><p className="verse">“O amor tudo sofre, tudo crê, tudo espera, tudo suporta.” — 1 Coríntios 13:7</p></> },
+    { eyebrow: 'Família', title: 'Onde existe mãe, existe casa', content: <><p className="slide-text">Uma família não é feita só de sobrenome. É feita de gente que cuida, perdoa, ora, ensina e permanece. E muitas vezes, esse coração começa em uma mãe.</p><p className="small-note">Mãe é raiz, abrigo e oração em forma de gente.</p></> },
+    { eyebrow: 'Reflexão', title: `${person} é presença de Deus`, content: <><p className="slide-text">{person}, seu amor não é pequeno. Ele aparece nos detalhes: na preocupação, no conselho, no cuidado silencioso e na força de continuar mesmo cansada.</p><p className="small-note">O mundo chama isso de rotina. A família chama de amor.</p></> },
+    { eyebrow: 'Palavra de fé', title: 'Uma bênção para hoje', content: <><div className="blessing">{blessings[blessingIndex]}</div><button className="primary small" onClick={() => setBlessingIndex((blessingIndex + 1) % blessings.length)}>Sortear outra bênção 🙏</button></> },
+    { eyebrow: 'Brincadeira', title: 'Quiz das mães da família', content: <><p className="question">{quiz[quizIndex].question}</p><div className="option-grid">{quiz[quizIndex].options.map((option) => <button className="option" key={option} onClick={() => setAnswer(quiz[quizIndex].answer)}>{option}</button>)}</div>{answer && <div className="answer">{answer}</div>}<button className="ghost full" onClick={() => { setAnswer(''); setQuizIndex((quizIndex + 1) % quiz.length) }}>Nova pergunta</button></> },
+    { eyebrow: 'Interativo', title: 'Escolha uma carta', content: <><p className="small-note">Toque em uma carta para receber uma mensagem.</p><div className="card-grid">{cards.map((card) => <button key={card.title} onClick={() => setSelectedCard(card)} className={`gift-card ${selectedCard.title === card.title ? 'active' : ''}`}><span>{card.icon}</span><strong>{card.title}</strong></button>)}</div><div className="answer soft">{selectedCard.text}</div></> },
+    { eyebrow: 'Oração', title: 'Uma oração pela família', content: <><p className="slide-text">Senhor, abençoe cada mãe da nossa família. Renove a força, proteja o coração, dê sabedoria nos dias difíceis e alegria nos dias simples.</p><p className="small-note">Que nunca falte amor, união e fé dentro da nossa casa.</p></> },
+    { eyebrow: 'Encerramento', title: 'Esta homenagem fica guardada', content: <><p className="slide-text">Mãe e família são presentes que a gente não mede em dinheiro. Mede em memória, cuidado, oração e amor.</p><div className="final-box">Feliz Dia das Mães ❤️</div><button className="ghost full" onClick={() => { setSlide(0); setAnswer('') }}>Ver de novo</button></> },
   ], [person, blessingIndex, quizIndex, answer, selectedCard])
 
   const progress = Math.round(((slide + 1) / slides.length) * 100)
 
-  if (!started) {
-    return <main className="page"><Background /><section className="deck cover"><p className="eyebrow">Presente digital</p><h1>Amor em Código</h1><p className="cover-text">Uma apresentação interativa com carinho, fé, reflexão e brincadeiras para as mães da nossa família.</p><div className="chips">{familyMothers.map((item) => <button key={item} onClick={() => setPerson(item)} className={person === item ? 'chip active' : 'chip'}>{item}</button>)}</div><button className="primary" onClick={() => setStarted(true)}>Começar homenagem 🌸</button></section></main>
-  }
+  if (!started) return <main className="page"><Background /><section className="deck cover"><p className="eyebrow">Presente digital</p><h1>Amor em Código</h1><p className="cover-text">Uma apresentação interativa com carinho, fé, reflexão e brincadeiras para as mães da nossa família.</p><div className="chips">{familyMothers.map((item) => <button key={item} onClick={() => setPerson(item)} className={person === item ? 'chip active' : 'chip'}>{item}</button>)}</div><button className="primary" onClick={() => setStarted(true)}>Começar homenagem 🌸</button></section></main>
 
-  return <main className="page"><Background /><section className="deck"><div className="top"><div><p className="eyebrow">{slides[slide].eyebrow}</p><h2>{slides[slide].title}</h2></div><span className="counter">{slide + 1}/{slides.length}</span></div><div className="bar"><div style={{ width: `${progress}%` }} /></div><div className="slide-body">{slides[slide].content}</div><div className="nav"><button className="ghost" disabled={slide === 0} onClick={() => setSlide(slide - 1)}>Voltar</button><button className="primary" onClick={() => setSlide(Math.min(slides.length - 1, slide + 1))}>{slide === slides.length - 1 ? 'Finalizar ❤️' : 'Continuar'}</button></div></section></main>
+  const last = slide === slides.length - 1
+  return <main className="page"><Background /><section className="deck"><div className="top"><div><p className="eyebrow">{slides[slide].eyebrow}</p><h2>{slides[slide].title}</h2></div><span className="counter">{slide + 1}/{slides.length}</span></div><div className="bar"><div style={{ width: `${progress}%` }} /></div><div className="slide-body">{slides[slide].content}</div><div className="nav"><button className="ghost" disabled={slide === 0} onClick={() => setSlide(slide - 1)}>Voltar</button>{!last && <button className="primary" onClick={() => setSlide(slide + 1)}>Continuar</button>}</div></section></main>
 }
 
 function Background() {
